@@ -77,7 +77,7 @@ class ChatUI {
 
     async sendToGemini(message) {
         const API_KEY = 'AIzaSyCpcoEdxRamjbM9k7GKKCBYK8zmNUH20rY';
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5pro:generateContent';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
         
         const response = await fetch(`${API_URL}?key=${API_KEY}`, {
             method: 'POST',
@@ -134,7 +134,7 @@ class ChatUI {
                 }
             });
             
-            // コードブロック内のシンタックスハイライト��適用
+            // コードブロック内のシンタックスハイライト適用
             messageDiv.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block);
             });
