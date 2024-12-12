@@ -1,0 +1,607 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Google Sans', 'Helvetica Neue', Arial, sans-serif;
+    background: #000000;
+    min-height: 100vh;
+    color: #fff;
+}
+
+.container {
+    display: flex;
+    max-width: none;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    justify-content: center;
+}
+
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.chat-header {
+    background: #000000;
+    color: white;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(66, 133, 244, 0.4);
+    box-shadow: 0 1px 2px rgba(66, 133, 244, 0.1);
+    display: flex;
+    align-items: center;
+}
+
+.chat-header h1 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-left: 0rem;
+    background: linear-gradient(90deg, 
+        #4285f4 0%,
+        #8ea7ff 50%,
+        #f0b9ff 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+    background: #000000;
+    color: #ffffff;
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 160px);
+    scroll-behavior: smooth;
+    scroll-timeline: 1500ms;
+}
+
+.message {
+    padding: 0.5rem;
+    color: #ffffff;
+    line-height: 1.5;
+    margin-bottom: 0.25rem;
+    white-space: pre-wrap;
+    animation: messageSlide 0.4s ease-out;
+}
+
+.user-message {
+    background: #000000;
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    max-width: 70%;
+    text-align: right;
+    margin-right: 2rem;
+}
+
+.bot-message {
+    background: #000000;
+    margin-right: auto;
+    padding: 0.5rem 1rem;
+    width: 70%;
+    margin-left: 2rem;
+}
+
+.chat-input {
+    padding: 1rem 1.5rem;
+    background: #000000;
+    width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-messages:empty ~ .chat-input,
+body:not(.has-messages) .chat-input {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    animation: floatIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.has-messages .chat-input {
+    position: relative;
+    animation: slideToBottom 1s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@keyframes floatIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes slideToBottom {
+    0% {
+        opacity: 1;
+        transform: translateY(-50vh);
+    }
+    30% {
+        opacity: 0;
+        transform: translateY(-40vh);
+    }
+    70% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    85% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    95% {
+        opacity: 1;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    height: auto;
+    overflow: visible;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.25rem 3rem 0.25rem 0;
+    background: transparent;
+    border: none;
+    resize: none;
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.5;
+    min-height: 24px;
+    height: auto;
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+textarea::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+textarea:focus {
+    outline: none;
+}
+
+#send-button {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+#send-button:hover {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.image-upload-area {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.upload-prompt {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.preview-image-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-image {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* コードブロックのスタイル */
+.bot-message pre {
+    background: #1E1E1E;
+    border-radius: 8px;
+    padding: 1rem 0;
+    margin: 1rem 0;
+    position: relative;
+    overflow-x: auto;
+    width: 100%;
+    border: none;
+}
+
+.bot-message pre code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* コードブロックのヘッダー */
+.bot-message pre::before {
+    content: "Python";
+    display: block;
+    padding: 0.5rem 1rem;
+    background: #2D2D2D;
+    color: #fff;
+    font-size: 0.9rem;
+    font-family: 'Google Sans', sans-serif;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.5rem;
+}
+
+/* コードブロックの内容 */
+.bot-message pre code {
+    display: block;
+    padding: 0 1rem;
+    color: #D4D4D4;
+}
+
+/* シンタックスハイライトの色 */
+.hljs-string { color: #CE9178; }
+.hljs-keyword { color: #569CD6; }
+.hljs-function { color: #DCDCAA; }
+.hljs-comment { color: #6A9955; }
+.hljs-number { color: #B5CEA8; }
+.hljs-operator { color: #D4D4D4; }
+
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 考え中のインジケーター */
+.thinking-indicator {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 1rem 1.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.thinking-indicator.visible {
+    display: flex;
+}
+
+.dots {
+    display: flex;
+    gap: 4px;
+}
+
+.dots span {
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    animation: dot-flashing 1s infinite linear alternate;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dot-flashing {
+    0% {
+        opacity: 0.2;
+        transform: scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.thinking-text {
+    font-family: 'Google Sans', sans-serif;
+}
+
+/* モバイル対の基本設定 */
+@media (max-width: 768px) {
+    .chat-input {
+        width: 100%;
+        padding: 0.75rem;
+        max-width: 100vw;
+    }
+
+    .chat-messages:empty ~ .chat-input,
+    body:not(.has-messages) .chat-input {
+        width: calc(100% - 2rem);
+        max-width: 600px;
+    }
+
+    .user-message {
+        max-width: 85%;
+        margin-right: 1rem;
+        word-break: break-word;
+    }
+
+    .bot-message {
+        width: calc(100% - 2rem);
+        max-width: 85%;
+        margin-left: 1rem;
+        word-break: break-word;
+    }
+
+    /* コードブロックのはみ出し防止 */
+    .bot-message pre {
+        max-width: 100%;
+        margin: 0.75rem 0;
+        overflow-x: auto;
+    }
+
+    /* 入力欄の調整 */
+    .input-container {
+        max-width: 100%;
+    }
+
+    .chat-header h1 {
+        margin-left: 1rem;
+        font-size: 1.25rem;
+        white-space: nowrap;
+    }
+
+    textarea {
+        padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    /* コードブロックの調整 */
+    .bot-message pre {
+        margin: 0.75rem -0.5rem;
+        border-radius: 4px;
+    }
+
+    .bot-message pre code {
+        font-size: 13px;
+        padding: 0 0.75rem;
+    }
+
+    .chat-container {
+        padding: 0 10px;
+    }
+
+    /* ウェルカムメッセージのモバイル調整 */
+    .chat-messages:empty ~ .chat-input .welcome-message,
+    body:not(.has-messages) .chat-input .welcome-message {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        padding: 0 1rem;
+    }
+
+    /* 入力欄の初期状態の調整 */
+    .chat-messages:empty ~ .chat-input .input-container,
+    body:not(.has-messages) .chat-input .input-container {
+        width: 100%;
+        max-width: 600px;
+        padding: 1rem;
+    }
+}
+
+/* さらに小さい画用 */
+@media (max-width: 480px) {
+    .chat-messages:empty ~ .chat-input,
+    body:not(.has-messages) .chat-input {
+        width: calc(100% - 1rem);
+    }
+
+    .chat-messages {
+        padding: 1rem;
+    }
+
+    .user-message,
+    .bot-message {
+        max-width: calc(100% - 1rem);
+        margin: 0.25rem 0.5rem;
+    }
+
+    .thinking-indicator {
+        padding: 0.75rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    /* ウェルカムメッセージのさらなる調整 */
+    .chat-messages:empty ~ .chat-input .welcome-message,
+    body:not(.has-messages) .chat-input .welcome-message {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        padding: 0 0.5rem;
+    }
+
+    /* 入力欄の初期状態のさらなる調整 */
+    .chat-messages:empty ~ .chat-input .input-container,
+    body:not(.has-messages) .chat-input .input-container {
+        padding: 0.75rem;
+    }
+}
+
+/* 入力欄のホバー効果 */
+.input-container:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 初期状態の入力欄をより強調 */
+.chat-messages:empty ~ .chat-input .input-container,
+body:not(.has-messages) .chat-input .input-container {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2),
+                0 4px 16px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    padding: 1.5rem 1.5rem;
+    width: 900px;
+}
+
+/* 初期状態のホバー効果をより強く */
+.chat-messages:empty ~ .chat-input .input-container:hover,
+body:not(.has-messages) .chat-input .input-container:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2),
+                0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* テキストエリアのスクロールバーカスタマイズ */
+textarea::-webkit-scrollbar {
+    width: 4px;
+}
+
+textarea::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* テキストエリアの初期サイズ調整 */
+.chat-messages:empty ~ .chat-input textarea,
+body:not(.has-messages) .chat-input textarea {
+    min-height: 60px;
+}
+
+/* ウェルカムメッセージのスタイル */
+.welcome-message {
+    display: none; /* デフォルトでは非表示 */
+}
+
+/* 初期状態（メッセージがない時）のみ表示 */
+.chat-messages:empty ~ .chat-input .welcome-message,
+body:not(.has-messages) .chat-input .welcome-message {
+    display: block;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+    background: linear-gradient(90deg, 
+        #4285f4 0%,
+        #8ea7ff 50%,
+        #f0b9ff 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: welcomeSlide 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes welcomeSlide {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 
