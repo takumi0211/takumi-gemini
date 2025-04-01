@@ -88,7 +88,7 @@ class ChatUI {
 
     async sendToGemini(message) {
         const API_KEY = 'AIzaSyAlS5wl0mRqtOepymOvhg-303uk_aovHT8';
-        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent';
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro-exp-03-25:generateContent';
         
         const response = await fetch(`${API_URL}?key=${API_KEY}`, {
             method: 'POST',
